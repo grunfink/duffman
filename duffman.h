@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdint.h>
 
-#define DUFFMAN_VERSION "2.00-wrk"
+#define DUFFMAN_VERSION "2.00"
 
 struct node {
     int freq;       /* frequency */
@@ -323,8 +323,11 @@ const uint8_t *decompress_stream(const struct node *tree, int r,
         int nr = r;
 
         do {
-            if (nr < 0 || nr >= NUM_NODES)
-                goto end;           /* corrupted stream */
+            if (nr < 0 || nr >= NUM_NODES) {
+                /* corrupted stream */
+                ibuf = NULL;
+                goto end;
+            }
             else
             if (tree[nr].branch[0] == -1 && tree[nr].branch[1] == -1)
                 c = tree[nr].chr;   /* symbol found */

@@ -74,7 +74,11 @@ int decompress(FILE *i, FILE *o)
                 break;
             }
 
-            duffman_decompress(bi, bo);
+            if (duffman_decompress(bi, bo) == NULL) {
+                fprintf(stderr, "error: corrupted stream\n");
+                ret = 4;
+                break;
+            }
 
             fwrite(bo, 1, dz, o);
         }
